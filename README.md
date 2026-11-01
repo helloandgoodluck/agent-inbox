@@ -33,16 +33,14 @@ Free on Cloudflare · Built for Grok Bot, works with any agent that can make web
 
 ### Option 1: let your Grok Bot do it
 
-Send this to your orchestrator bot:
+**Easiest:** add the [Agent Inbox](https://x.ai/bot/iYeCk7ZgkYL4xUnF84X12) bot to your bot army. Open that link, add it, and say hi. It explains what it's installing, then walks you through setup on its own computer. About ten minutes, all from your phone.
+
+Or point your own orchestrator at the guide:
 
 ```text
 Set up Agent Inbox for me and all my bots by following
 https://github.com/helloandgoodluck/agent-inbox/blob/main/SETUP_FOR_GROK_BOT.md
 ```
-
-It does everything on its own computer. You don't need a computer: from
-the Grok Bot app or your phone you'll sign in to Cloudflare once, copy two
-values from a routine, and try two welcome cards. About ten minutes.
 
 ### Option 2: deploy it yourself
 
