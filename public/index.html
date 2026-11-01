@@ -1,0 +1,156 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="robots" content="noindex" />
+    <meta name="theme-color" content="#0b0d12" />
+    <title>Agent Inbox</title>
+    <link rel="stylesheet" href="/style.css" />
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand">
+        <span class="logo" aria-hidden="true"></span>
+        <h1>Agent Inbox</h1>
+      </div>
+      <div class="top-actions">
+        <div id="filter-phone"></div>
+        <button id="refresh" class="ghost icon-btn" type="button" title="Refresh" aria-label="Refresh" hidden>
+          <span class="refresh-icon" aria-hidden="true"></span>
+        </button>
+        <button id="signout" class="ghost" hidden>Sign out</button>
+      </div>
+    </header>
+
+    <section id="login" class="panel" hidden>
+      <span class="logo big" aria-hidden="true"></span>
+      <h2>Welcome back</h2>
+      <p class="muted">Sign in to see what your bots need from you.</p>
+      <button id="passkey" class="primary" type="button">Sign in with passkey</button>
+      <p id="no-passkey" class="muted small" hidden>No passkey yet? Ask your bot for a setup link.</p>
+      <details>
+        <summary class="muted small">Use the inbox secret instead</summary>
+        <form id="secret-form">
+          <label for="secret">Inbox secret</label>
+          <input id="secret" type="password" autocomplete="current-password" required />
+          <button type="submit">Open inbox</button>
+          <p class="muted small">The secret stays in this browser (localStorage) and is sent only to this Worker.</p>
+        </form>
+      </details>
+    </section>
+
+    <div id="dashboard" hidden>
+      <p id="summary" class="summary"></p>
+
+      <nav id="tabs" class="seg phone-tabs" aria-label="Sections">
+        <button data-pane="waiting" class="active">Waiting <span class="n" id="tab-waiting-n"></span></button>
+        <button data-pane="timeline">Timeline</button>
+        <button data-pane="activity">Activity</button>
+      </nav>
+
+      <main id="board">
+        <section class="pane active" data-pane="waiting" aria-labelledby="waiting-h">
+          <header class="pane-head">
+            <h2 id="waiting-h">Waiting on me <span class="count" id="waiting-n"></span></h2>
+          </header>
+          <div class="pane-body" id="waiting-list"></div>
+          <p class="pane-foot" id="snoozed-note" hidden></p>
+        </section>
+
+        <section class="pane" data-pane="timeline" aria-labelledby="timeline-h">
+          <header class="pane-head">
+            <h2 id="timeline-h">Timeline</h2>
+            <div id="filter-wide">
+              <label class="pill-select">
+                <span class="sr-only">Filter by bot</span>
+                <select id="bot-filter">
+                  <option value="">All bots</option>
+                </select>
+              </label>
+            </div>
+          </header>
+          <div class="date-tabs" id="date-tabs" role="tablist" aria-label="Day"></div>
+          <div class="pane-body" id="timeline"></div>
+        </section>
+
+        <section class="pane" data-pane="activity" aria-label="Bot activity">
+          <header class="pane-head">
+            <div class="seg" id="activity-tabs" role="tablist">
+              <button data-tab="in_progress" class="active">In progress <span class="n"></span></button>
+              <button data-tab="finished">Finished <span class="n"></span></button>
+              <button data-tab="done">Done</button>
+            </div>
+          </header>
+          <div class="pane-body">
+            <div id="activity-list"></div>
+            <section class="bots" aria-labelledby="bots-h">
+              <h3 id="bots-h" class="bots-h"><span>Bots</span><span class="bots-range" id="bots-range"></span></h3>
+              <ul id="bots-list"></ul>
+            </section>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <p id="status" class="toast" role="status" aria-live="polite"></p>
+
+    <template id="ask-tpl">
+      <article class="card ask">
+        <button class="card-main" type="button" aria-expanded="false">
+          <span class="avatar"></span>
+          <span class="card-text">
+            <span class="card-top">
+              <span class="bot"></span>
+              <span class="type-pill"></span>
+              <time></time>
+            </span>
+            <span class="ask-title"></span>
+          </span>
+        </button>
+        <div class="card-more" hidden>
+          <p class="note"></p>
+          <ul class="links"></ul>
+          <div class="actions">
+            <button class="act done" type="button">Done</button>
+            <button class="act reject" type="button">Reject</button>
+            <button class="act reply" type="button">Reply</button>
+            <label class="act snooze">
+              <span class="sr-only">Snooze</span>
+              <select>
+                <option value="">Snooze</option>
+                <option value="60">1 hour</option>
+                <option value="240">4 hours</option>
+                <option value="tomorrow">Tomorrow 9am</option>
+                <option value="10080">1 week</option>
+              </select>
+            </label>
+          </div>
+          <form class="reply-form" hidden>
+            <textarea rows="3" placeholder="Reply to the bot…" required></textarea>
+            <div class="reply-actions">
+              <button type="button" class="ghost cancel">Cancel</button>
+              <button type="submit" class="primary">Send reply</button>
+            </div>
+          </form>
+        </div>
+      </article>
+    </template>
+
+    <template id="mini-tpl">
+      <article class="card mini">
+        <span class="avatar"></span>
+        <span class="card-text">
+          <span class="card-top">
+            <span class="bot"></span>
+            <span class="state"></span>
+            <time></time>
+          </span>
+          <span class="mini-text"></span>
+        </span>
+      </article>
+    </template>
+
+    <script src="/app.js" type="module"></script>
+  </body>
+</html>

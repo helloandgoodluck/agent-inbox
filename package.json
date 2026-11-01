@@ -1,0 +1,57 @@
+{
+  "name": "agent-inbox",
+  "version": "0.1.0",
+  "private": true,
+  "description": "One inbox for everything your AI agents are waiting on you for. A Cloudflare Worker + D1.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "wrangler dev",
+    "db:migrate:local": "wrangler d1 migrations apply DB --local",
+    "test": "vitest run",
+    "smoke": "node scripts/smoke.mjs",
+    "seed:demo": "node scripts/seed-demo.mjs",
+    "screenshot": "node scripts/screenshot.mjs",
+    "check:page": "node scripts/page-check.mjs",
+    "enroll-link": "node scripts/enroll-link.mjs",
+    "setup": "node scripts/setup.mjs",
+    "typecheck": "tsc --noEmit",
+    "deploy": "wrangler d1 migrations apply DB --remote && wrangler deploy"
+  },
+  "cloudflare": {
+    "bindings": {
+      "BOT_TOKEN": {
+        "description": "Bearer token your bots send to create items and mark them done. At least 32 characters: generate one with openssl rand -hex 32. Store it in a mode-600 file for your agents; never paste it into chat."
+      },
+      "INBOX_SECRET": {
+        "description": "Shared secret you type into the inbox page to unlock it. At least 32 characters: generate one with openssl rand -hex 32."
+      },
+      "FORWARD_WEBHOOK_URL": {
+        "description": "Optional. URL that receives every click (done, reject, reply, snooze) as JSON. Leave empty to skip forwarding."
+      },
+      "FORWARD_WEBHOOK_KEY": {
+        "description": "Optional. Sent to the webhook as Authorization: Bearer <key>, for receivers that check a sender key."
+      },
+      "FORWARD_SIGNING_SECRET": {
+        "description": "Optional. Signs each webhook body with HMAC-SHA256 in the X-Agent-Inbox-Signature header. Never sent; use a different value from FORWARD_WEBHOOK_KEY."
+      },
+      "CANONICAL_BOTS": {
+        "description": "Optional. Comma-separated bot names to always store with exactly that spelling, e.g. Deploy Bot,QA. Leave empty to keep each bot's first-seen casing."
+      }
+    }
+  },
+  "devDependencies": {
+    "@cloudflare/vitest-plugin": "^1.4.8",
+    "@cloudflare/workers-types": "^5.20261026.1",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.7",
+    "vitest": "~4.1.0",
+    "wrangler": "^4.153.0"
+  },
+  "dependencies": {
+    "@simplewebauthn/server": "^14.0.3"
+  }
+}

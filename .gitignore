@@ -1,0 +1,8 @@
+node_modules/
+.wrangler/
+.dev.vars
+.dev.vars.*
+!.dev.vars.example
+.DS_Store
+# Your own deploy config with a database_id; see CONTRIBUTING.md.
+wrangler.local.jsonc

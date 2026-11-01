@@ -1,0 +1,38 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "agent-inbox",
+  "main": "src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "assets": {
+    "directory": "./public"
+  },
+  "d1_databases": [
+    {
+      "binding": "DB",
+      "database_name": "agent-inbox",
+      // No database_id yet: the Deploy to Cloudflare button creates the
+      // database and fills this in. For a manual deploy, run
+      // `wrangler d1 create agent-inbox` and paste the id here.
+      // Local dev doesn't need one.
+      "migrations_dir": "migrations"
+    }
+  ],
+  // Caps sign-in requests per client IP (see limitAuth in src/index.ts). The
+  // passkey routes need no auth and write to D1, so without this a script
+  // could spend the free plan's daily D1 writes. namespace_id is any integer
+  // unique within your Cloudflare account.
+  "ratelimits": [
+    {
+      "name": "AUTH_LIMITER",
+      "namespace_id": "4710",
+      "simple": { "limit": 20, "period": 60 }
+    }
+  ],
+  // Retries undelivered forward webhooks (see retryDeliveries in src/index.ts).
+  "triggers": {
+    "crons": ["* * * * *"]
+  },
+  "observability": {
+    "enabled": true
+  }
+}

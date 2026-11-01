@@ -1,0 +1,28 @@
+# Copy to .dev.vars for local dev. In production set these with
+# `npx wrangler secret put NAME` (or in the Cloudflare dashboard).
+
+# BOT_TOKEN and INBOX_SECRET must each be at least 32 characters; shorter
+# values are refused. Generate each with `openssl rand -hex 32`.
+
+# Bots send this as `Authorization: Bearer <BOT_TOKEN>`.
+BOT_TOKEN=
+
+# You type this into the inbox page to unlock it.
+INBOX_SECRET=
+
+# Optional: every Done / Reject / Reply / Snooze click is POSTed here as JSON.
+# Leave empty to skip. `npm run smoke` starts a receiver for a local URL such
+# as http://127.0.0.1:8789/hook.
+FORWARD_WEBHOOK_URL=
+# Optional: sent as `Authorization: Bearer <FORWARD_WEBHOOK_KEY>`, for
+# receivers that check a sender key. The receiver sees this value.
+FORWARD_WEBHOOK_KEY=
+# Optional: signs each body (HMAC-SHA256) in the X-Agent-Inbox-Signature
+# header. Never sent. Use a different value from FORWARD_WEBHOOK_KEY; if the
+# two match, requests go unsigned. Unset: no signature header.
+FORWARD_SIGNING_SECRET=
+
+# Optional: comma-separated bot names stored with exactly this spelling
+# whatever casing a bot posts with, e.g. `Deploy Bot,QA`. Other bots keep the
+# casing they were first seen with.
+CANONICAL_BOTS=
